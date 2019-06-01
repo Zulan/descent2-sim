@@ -3,6 +3,7 @@ from itertools import product
 from collections import defaultdict
 
 from .rolls import Chance, AttackRoll, DefenseRoll, Bonus
+from . import dice
 
 
 def roll_all(attack_dice=(), defense_dice=()) -> Generator[Chance, None, None]:
@@ -44,3 +45,16 @@ def fight(attack_dice, defense_dice, bonus=Bonus(), surge_bonuses=()):
 
     for damage, chance in results.items():
         yield damage, chance
+
+
+def skillcheck():
+    chances = defaultdict(float)
+    for _, defense_roll, chance in roll(defense_dice=(dice.gray(), dice.black())):
+        chances[defense_roll.shields] += chance
+
+    success_chance = defaultdict(float)
+    for skill in range(max(list(chances.keys())) + 1):
+        for defense_roll in range(skill + 1):
+            success_chance[skill] += chances[defense_roll]
+
+    return success_chance

@@ -16,3 +16,8 @@ def fight(*args, **kwargs):
     print(f"Mean damage {mean}")
     ax = sns.barplot("damage", "chance", data=df, color=current_palette[0])
     ax.axvline(mean, color=current_palette[1], linestyle="--")
+
+
+def skillcheck():
+    df = pd.DataFrame(columns=["skill", "chance"], data=list(sim.skillcheck().items()))
+    sns.barplot("skill", "chance", data=df)
